@@ -68,7 +68,7 @@ public class Triangle extends Activity implements GLSurfaceView.Renderer {
         Log.i("pcj", "sufaceview oncreated");
   /*------ Log  end------*/
         //  清除屏幕颜色
-        GLES20.glClearColor(0.5f,0.5f,0.5f,1.0f);
+        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f );
 
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(triangleCoords.length * 4);
         byteBuffer.order(ByteOrder.nativeOrder());

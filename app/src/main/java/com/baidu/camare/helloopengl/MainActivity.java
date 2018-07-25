@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mView = findViewById(R.id.lv_view);
         mDatas = new ArrayList<>();
         setData("三角形", Triangle.class);
+        setData("正彩色三角形",ColorTriangleActivity.class);
         mAdapter = new ListViewAdapter();
         mView.setAdapter(mAdapter);
     }
