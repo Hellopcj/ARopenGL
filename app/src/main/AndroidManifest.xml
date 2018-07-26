@@ -28,7 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Triangle" />
-        <activity android:name=".ColorTriangleActivity"></activity>
+        <activity android:name=".ColorTriangleActivity" />
+        <activity android:name=".TubeActivity"></activity>
     </application>
 
 </manifest>

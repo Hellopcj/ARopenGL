@@ -83,7 +83,7 @@ public class ColorTriangleActivity extends Activity {
         mSurfaceView.setRenderer(new GLSurfaceView.Renderer() {
             @Override
             public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-
+            //   注意 allocate  崩溃
                 GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
                 ByteBuffer aa = ByteBuffer.allocateDirect(triangleCoords.length * 4);
                 aa.order(ByteOrder.nativeOrder());
