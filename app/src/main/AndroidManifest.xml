@@ -29,7 +29,9 @@
         </activity>
         <activity android:name=".Triangle" />
         <activity android:name=".ColorTriangleActivity" />
-        <activity android:name=".TubeActivity"></activity>
+        <activity android:name=".TubeActivity" />
+        <activity android:name=".LoadOBJActivity" />
+        <activity android:name=".OpenGlCamareActivity"></activity>
     </application>
 
 </manifest>

@@ -25,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
         mView = findViewById(R.id.lv_view);
         mDatas = new ArrayList<>();
         setData("三角形", Triangle.class);
-        setData("正彩色三角形",ColorTriangleActivity.class);
-        setData("正方体",TubeActivity.class);
+        setData("正彩色三角形", ColorTriangleActivity.class);
+        setData("正方体", TubeActivity.class);
+        setData("相机预览", OpenGlCamareActivity.class);
+        setData("load obj文件", LoadOBJActivity.class);
         mAdapter = new ListViewAdapter();
         mView.setAdapter(mAdapter);
     }
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             mDescribe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this,mDatas.get(i).mClass);
+                    Intent intent = new Intent(MainActivity.this, mDatas.get(i).mClass);
                     startActivity(intent);
                 }
             });

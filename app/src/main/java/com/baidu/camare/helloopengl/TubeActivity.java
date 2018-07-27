@@ -29,7 +29,7 @@ public class TubeActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mView.onPause();
+        //  mView.onPause();
     }
 
     @Override
