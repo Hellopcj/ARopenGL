@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setData("load obj文件", LoadOBJActivity.class);
         mAdapter = new ListViewAdapter();
         mView.setAdapter(mAdapter);
+        // 测试filePath
+//        File file = new File("hello");
+//        file.getAbsolutePath();
     }
 
 
