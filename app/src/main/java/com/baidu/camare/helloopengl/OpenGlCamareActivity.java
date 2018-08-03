@@ -1,25 +1,34 @@
 package com.baidu.camare.helloopengl;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /*
-camare 预览
+    Camera 相机预览
  */
 public class OpenGlCamareActivity extends AppCompatActivity implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener, Camera.FaceDetectionListener, Camera.PreviewCallback {
 
     private GLSurfaceView mGlSurfaceView;
 
     private SurfaceTexture mCamareView;
-    private int SurfaceTextureId;
+    private int SurfaceTextureId = -1;
 
     private Camera mCamare;
     private int mPreviewWidth = 1280;
@@ -30,8 +39,8 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_gl_camare);
         mGlSurfaceView = findViewById(R.id.gl_camare_view);
-        mGlSurfaceView.setRenderer(this);
         mGlSurfaceView.setEGLContextClientVersion(2);
+        mGlSurfaceView.setRenderer(this);
         mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
@@ -44,11 +53,12 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int i, int i1) {
+        Log.i("pcj","onSurfaceChanged");
         //  调用相机预览
-        if (mCamareView == null){
+        if (mCamareView == null) {
             mCamareView = new SurfaceTexture(SurfaceTextureId);
             //  开启相机
-            opencamare(mCamareView,true);
+            opencamare(mCamareView, true);
         }
     }
 
@@ -80,31 +90,35 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
 
     }
 
+    public void releaseCamera() {
+        if (null != mCamare) {
+            mCamare.setPreviewCallback(null);
+            mCamare.stopPreview();
+            mCamare.release();
+            mCamare = null;
+        }
+    }
     private void opencamare(SurfaceTexture surfaceTexture, boolean isfront) {
         try {
-            mCamare = getInstanceCamare(true);
+            mCamare = getInstanceCamare(isfront);
             if (mCamare == null) {
-                opencamare(mCamareView, true);
+                opencamare(mCamareView, isfront);
                 return;
             }
-            Camera.Parameters parameters = mCamare.getParameters();
-            parameters.setPreviewSize(mPreviewWidth, mPreviewHeigth);
-            parameters.setPreviewSize(mPreviewWidth, mPreviewHeigth);
+            Camera.Parameters params = mCamare.getParameters();
+            params.setPreviewSize(mPreviewWidth, mPreviewHeigth);
             if (!isfront) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
-            mCamare.setParameters(parameters);
+
+            mCamare.setParameters(params);
             mCamare.setPreviewTexture(surfaceTexture);
-            // 设置相机旋转角度
+            mCamare.setDisplayOrientation(90);
 
             mCamare.setPreviewCallback(this);
-            // 谷歌自带人脸识别
-            mCamare.setFaceDetectionListener(this);
-
             mCamare.startPreview();
             mCamare.cancelAutoFocus();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,11 +141,84 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
 
     @Override
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
-
+        //   谷歌 人脸检测
+       Log.i("pcj",faces.toString());
     }
 
     @Override
     public void onPreviewFrame(byte[] bytes, Camera camera) {
+        if (mGlSurfaceView!= null){
+            mGlSurfaceView.requestRender();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestAllPermissions(REQUEST_CODE_ASK_ALL_PERMISSIONS);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseCamera();
+      //  mGlSurfaceView.surfaceDestroyed();
+    }
+    // 权限请求相关相关
+    private static final String[] ALL_PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+    private static final int REQUEST_CODE_ASK_ALL_PERMISSIONS = 154;
+    private boolean mIsDenyAllPermission = false;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_CODE_ASK_ALL_PERMISSIONS) {
+            mIsDenyAllPermission = false;
+            for (int i = 0; i < permissions.length; i++) {
+                if (i >= grantResults.length || grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    mIsDenyAllPermission = true;
+                    break;
+                }
+            }
+            if (mIsDenyAllPermission) {
+                finish();
+            }
+        }
 
     }
+
+    /**
+     * 请求权限
+     *
+     * @param requestCode
+     */
+    private void requestAllPermissions(int requestCode) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                List<String> permissionsList = getRequestPermissions(this);
+                if (permissionsList.size() == 0) {
+                    return;
+                }
+                if (!mIsDenyAllPermission) {
+                    requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                            requestCode);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static List<String> getRequestPermissions(Activity activity) {
+        List<String> permissionsList = new ArrayList();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (String permission : ALL_PERMISSIONS) {
+                if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsList.add(permission);
+                }
+            }
+        }
+        return permissionsList;
+    }
+
 }
