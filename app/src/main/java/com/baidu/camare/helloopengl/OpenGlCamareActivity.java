@@ -48,12 +48,13 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         //  创建纹理 id
         SurfaceTextureId = createTextureID();
+        Log.i("pcj","-- onSurfaceCreated");
 
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int i, int i1) {
-        Log.i("pcj","onSurfaceChanged");
+        Log.i("pcj","-- onSurfaceChanged");
         //  调用相机预览
         if (mCamareView == null) {
             mCamareView = new SurfaceTexture(SurfaceTextureId);
@@ -64,7 +65,7 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-
+        Log.i("pcj","-- onDrawFrame");
     }
 
     private int createTextureID() {
@@ -87,6 +88,7 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     //  surfaceteture
     @Override
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+        Log.i("pcj","-- onFrameAvailable");
 
     }
 
@@ -147,6 +149,8 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
 
     @Override
     public void onPreviewFrame(byte[] bytes, Camera camera) {
+        //   camare 回调
+        Log.i("pcj","-- onPreviewFrame");
         if (mGlSurfaceView!= null){
             mGlSurfaceView.requestRender();
         }
