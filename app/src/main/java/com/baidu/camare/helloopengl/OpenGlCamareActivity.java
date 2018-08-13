@@ -1,21 +1,12 @@
 package com.baidu.camare.helloopengl;
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -26,13 +17,13 @@ import javax.microedition.khronos.opengles.GL10;
 public class OpenGlCamareActivity extends AppCompatActivity implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener, Camera.FaceDetectionListener, Camera.PreviewCallback {
 
     private GLSurfaceView mGlSurfaceView;
-
     private SurfaceTexture mCamareView;
     private int SurfaceTextureId = -1;
 
     private Camera mCamare;
     private int mPreviewWidth = 1280;
     private int mPreviewHeigth = 720;
+    // camareid 0 1  前置摄像头和后置摄像头
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +150,6 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     @Override
     protected void onResume() {
         super.onResume();
-        requestAllPermissions(REQUEST_CODE_ASK_ALL_PERMISSIONS);
     }
 
     @Override
@@ -168,61 +158,7 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
         releaseCamera();
       //  mGlSurfaceView.surfaceDestroyed();
     }
-    // 权限请求相关相关
-    private static final String[] ALL_PERMISSIONS = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-    private static final int REQUEST_CODE_ASK_ALL_PERMISSIONS = 154;
-    private boolean mIsDenyAllPermission = false;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_CODE_ASK_ALL_PERMISSIONS) {
-            mIsDenyAllPermission = false;
-            for (int i = 0; i < permissions.length; i++) {
-                if (i >= grantResults.length || grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    mIsDenyAllPermission = true;
-                    break;
-                }
-            }
-            if (mIsDenyAllPermission) {
-                finish();
-            }
-        }
 
-    }
-
-    /**
-     * 请求权限
-     *
-     * @param requestCode
-     */
-    private void requestAllPermissions(int requestCode) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                List<String> permissionsList = getRequestPermissions(this);
-                if (permissionsList.size() == 0) {
-                    return;
-                }
-                if (!mIsDenyAllPermission) {
-                    requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-                            requestCode);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static List<String> getRequestPermissions(Activity activity) {
-        List<String> permissionsList = new ArrayList();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            for (String permission : ALL_PERMISSIONS) {
-                if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                    permissionsList.add(permission);
-                }
-            }
-        }
-        return permissionsList;
-    }
 
 }
