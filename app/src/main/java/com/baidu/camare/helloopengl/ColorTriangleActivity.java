@@ -111,6 +111,7 @@ public class ColorTriangleActivity extends Activity {
 
             @Override
             public void onSurfaceChanged(GL10 gl10, int width, int height) {
+                //  不需要开启深度测试
                 //计算宽高比
                 float ratio = (float) width / height;
                 //设置透视投影

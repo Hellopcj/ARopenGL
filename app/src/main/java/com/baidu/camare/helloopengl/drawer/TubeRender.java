@@ -30,6 +30,9 @@ public class TubeRender implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
+        //开启深度测试  这个必须写
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
         GLES20.glViewport(0, 0, width, height);
         if (mDrawer != null) {
             Log.i("pcj","onSurfaceChanged");
