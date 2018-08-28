@@ -1,4 +1,4 @@
-package com.baidu.camare.helloopengl.designmethod.abstract_faactory_method;
+package com.baidu.camare.helloopengl.designmethod.abstract_factory_method;
 
 /**
  * Created by puchunjie .

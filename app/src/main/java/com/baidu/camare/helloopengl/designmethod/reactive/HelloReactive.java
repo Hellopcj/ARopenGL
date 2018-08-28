@@ -1,0 +1,1 @@
+package com.baidu.camare.helloopengl.designmethod.reactive;/** *  反射 */public  class HelloReactive {    private String var1;    private int var2 = 40;    private String var3;    public void sendMessage() {    }    public int messageNumber(){        return var2;    }}
