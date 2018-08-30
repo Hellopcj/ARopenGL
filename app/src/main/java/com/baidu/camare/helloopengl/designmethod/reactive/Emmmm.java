@@ -1,0 +1,1 @@
+package com.baidu.camare.helloopengl.designmethod.reactive;public enum Emmmm {    state,    color,    shape,    action,    test();//    public static void main(String[] args) {//        System.out.println(state.getDeclaringClass());//        System.out.println(state.getClass());//    }    int test1() {        return 0;    }}
