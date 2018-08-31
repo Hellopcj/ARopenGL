@@ -1,0 +1,1 @@
+package com.baidu.camare.helloopengl.designmethod.emmmm;public class EnumTest {}
