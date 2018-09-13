@@ -31,6 +31,9 @@
         <activity android:name=".ColorTriangleActivity" />
         <activity android:name=".TubeActivity" />
         <activity android:name=".LoadOBJActivity" />
+        <activity android:name=".vedio.RecordActivity"/>
+        <activity android:name=".vedio.RecordVedioActivity"/>
+        <activity android:name=".vedio.VideoActivity"/>
         <activity android:name=".OpenGlCamareActivity"></activity>
     </application>
 

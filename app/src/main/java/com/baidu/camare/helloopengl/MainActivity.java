@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.baidu.camare.helloopengl.vedio.CameraToMpegTest;
+import com.baidu.camare.helloopengl.vedio.RecordVedioActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setData("正方体", TubeActivity.class);
         setData("相机预览", OpenGlCamareActivity.class);
         setData("load obj文件", LoadOBJActivity.class);
+        setData("vedio", CameraToMpegTest.class);
+        setData("视频录像",RecordVedioActivity.class);
         mAdapter = new ListViewAdapter();
         mView.setAdapter(mAdapter);
         // 测试filePath
