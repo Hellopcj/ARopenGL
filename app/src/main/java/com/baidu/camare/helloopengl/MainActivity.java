@@ -25,6 +25,13 @@ public class MainActivity extends AppCompatActivity {
     private List<Data> mDatas;
     private ListViewAdapter mAdapter;
 
+    // 权限请求相关相关
+    private static final String[] ALL_PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+    private static final int REQUEST_CODE_ASK_ALL_PERMISSIONS = 154;
+    private boolean mIsDenyAllPermission = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
         setData("三角形", Triangle.class);
         setData("正彩色三角形", ColorTriangleActivity.class);
         setData("正方体", TubeActivity.class);
-        setData("相机预览", OpenGlCamareActivity.class);
+        setData("相机预览", OpenGlCameraActivity.class);
         setData("load obj文件", LoadOBJActivity.class);
         setData("vedio", CameraToMpegTest.class);
-        setData("视频录像",RecordVedioActivity.class);
+        setData("视频录像", RecordVedioActivity.class);
+        setData("测试相机", CameraActivity.class);
         mAdapter = new ListViewAdapter();
         mView.setAdapter(mAdapter);
         // 测试filePath
@@ -120,12 +128,6 @@ public class MainActivity extends AppCompatActivity {
         requestAllPermissions(REQUEST_CODE_ASK_ALL_PERMISSIONS);
         super.onResume();
     }
-
-    // 权限请求相关相关
-    private static final String[] ALL_PERMISSIONS = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-    private static final int REQUEST_CODE_ASK_ALL_PERMISSIONS = 154;
-    private boolean mIsDenyAllPermission = false;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

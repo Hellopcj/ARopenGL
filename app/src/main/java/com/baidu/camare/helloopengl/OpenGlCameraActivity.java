@@ -1,4 +1,5 @@
 package com.baidu.camare.helloopengl;
+
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.GLES11Ext;
@@ -14,22 +15,22 @@ import javax.microedition.khronos.opengles.GL10;
 /*
     Camera 相机预览   Android 系统自带人脸识别回调【FaceDetectionListener】
  */
-public class OpenGlCamareActivity extends AppCompatActivity implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener, Camera.FaceDetectionListener, Camera.PreviewCallback {
+public class OpenGlCameraActivity extends AppCompatActivity implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener, Camera.FaceDetectionListener, Camera.PreviewCallback {
 
     private GLSurfaceView mGlSurfaceView;
-    private SurfaceTexture mCamareView;
+    private SurfaceTexture mCameraView;
     private int SurfaceTextureId = -1;
 
-    private Camera mCamare;
+    private Camera mCamera;
     private int mPreviewWidth = 1280;
-    private int mPreviewHeigth = 720;
-    // camareid 0 1  前置摄像头和后置摄像头
+    private int mPreviewHeight = 720;
+    // cameraId  0 1  前置摄像头和后置摄像头
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_gl_camare);
-        mGlSurfaceView = findViewById(R.id.gl_camare_view);
+        mGlSurfaceView = findViewById(R.id.gl_camera_view);
         mGlSurfaceView.setEGLContextClientVersion(2);
         mGlSurfaceView.setRenderer(this);
         mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -39,24 +40,24 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         //  创建纹理 id
         SurfaceTextureId = createTextureID();
-        Log.i("pcj","-- onSurfaceCreated");
+        Log.i("pcj", "-- onSurfaceCreated");
 
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int i, int i1) {
-        Log.i("pcj","-- onSurfaceChanged");
+        Log.i("pcj", "-- onSurfaceChanged");
         //  调用相机预览
-        if (mCamareView == null) {
-            mCamareView = new SurfaceTexture(SurfaceTextureId);
+        if (mCameraView == null) {
+            mCameraView = new SurfaceTexture(SurfaceTextureId);
             //  开启相机
-            opencamare(mCamareView, true);
+            opencamera(mCameraView, true);
         }
     }
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        Log.i("pcj","-- onDrawFrame");
+        Log.i("pcj", "-- onDrawFrame");
     }
 
     private int createTextureID() {
@@ -79,46 +80,47 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     //  surfaceteture
     @Override
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        Log.i("pcj","-- onFrameAvailable");
+        Log.i("pcj", "-- onFrameAvailable");
 
     }
 
     public void releaseCamera() {
-        if (null != mCamare) {
-            mCamare.setPreviewCallback(null);
-            mCamare.stopPreview();
-            mCamare.release();
-            mCamare = null;
+        if (null != mCamera) {
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
         }
     }
-    private void opencamare(SurfaceTexture surfaceTexture, boolean isfront) {
+
+    private void opencamera(SurfaceTexture surfaceTexture, boolean isfront) {
         try {
-            mCamare = getInstanceCamare(isfront);
-            if (mCamare == null) {
-                opencamare(mCamareView, isfront);
+            mCamera = getInstanceCamera(isfront);
+            if (mCamera == null) {
+                opencamera(mCameraView, isfront);
                 return;
             }
-            Camera.Parameters params = mCamare.getParameters();
-            params.setPreviewSize(mPreviewWidth, mPreviewHeigth);
+            Camera.Parameters params = mCamera.getParameters();
+            params.setPreviewSize(mPreviewWidth, mPreviewHeight);
             if (!isfront) {
                 params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
                 params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
 
-            mCamare.setParameters(params);
-            mCamare.setPreviewTexture(surfaceTexture);
-            mCamare.setDisplayOrientation(90);
+            mCamera.setParameters(params);
+            mCamera.setPreviewTexture(surfaceTexture);
+            mCamera.setDisplayOrientation(90);
 
-            mCamare.setPreviewCallback(this);
-            mCamare.startPreview();
-            mCamare.cancelAutoFocus();
+            mCamera.setPreviewCallback(this);
+            mCamera.startPreview();
+            mCamera.cancelAutoFocus();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private Camera getInstanceCamare(boolean isfront) {
+    private Camera getInstanceCamera(boolean isfront) {
         Camera c = null;
         try {
             if (isfront) {
@@ -135,14 +137,14 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     @Override
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
         //   谷歌 人脸检测
-       Log.i("pcj",faces.toString());
+        Log.i("pcj", faces.toString());
     }
 
     @Override
     public void onPreviewFrame(byte[] bytes, Camera camera) {
         //   camare 回调
-        Log.i("pcj","-- onPreviewFrame");
-        if (mGlSurfaceView!= null){
+        Log.i("pcj", "-- onPreviewFrame");
+        if (mGlSurfaceView != null) {
             mGlSurfaceView.requestRender();
         }
     }
@@ -156,9 +158,7 @@ public class OpenGlCamareActivity extends AppCompatActivity implements GLSurface
     protected void onDestroy() {
         super.onDestroy();
         releaseCamera();
-      //  mGlSurfaceView.surfaceDestroyed();
+        //  mGlSurfaceView.surfaceDestroyed();
     }
-
-
 
 }

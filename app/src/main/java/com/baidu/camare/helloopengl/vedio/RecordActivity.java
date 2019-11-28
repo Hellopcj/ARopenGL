@@ -49,7 +49,7 @@ public class RecordActivity extends Activity {
 	};
 
 	/**
-	 * ��ʼ¼��
+	 * 开始录像
 	 */
 	protected void start() {
 		try {
@@ -83,14 +83,14 @@ public class RecordActivity extends Activity {
 			isRecording=true;
 			btn_RecordStart.setEnabled(false);
 			btn_RecordStop.setEnabled(true);
-			Toast.makeText(RecordActivity.this, "��ʼ¼��", 0).show();
+			Toast.makeText(RecordActivity.this, "开始录像", Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * ¼������
+	 * 停止录像
 	 */
 	protected void stop() {
 		if (isRecording) {
@@ -100,7 +100,7 @@ public class RecordActivity extends Activity {
 			isRecording=false;
 			btn_RecordStart.setEnabled(true);
 			btn_RecordStop.setEnabled(false);
-			Toast.makeText(RecordActivity.this, "¼������", 0).show();
+			Toast.makeText(RecordActivity.this, "停止录像", Toast.LENGTH_SHORT).show();
 		}
 	}
 

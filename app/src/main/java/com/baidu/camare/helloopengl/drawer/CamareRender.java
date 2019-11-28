@@ -258,7 +258,7 @@ public class CamareRender {
         GLES20.glDepthMask(false);
 
         GLES20.glUseProgram(mProgramHandle);
-     //   ShaderUtil.checkGLError(TAG, "glUseProgram");
+//        ShaderUtil.checkGLError(TAG, "glUseProgram");
 
         GLES20.glUniformMatrix4fv(mUniformMVPMatrix, 1, false, mMvpMatrix, 0);
         GLES20.glUniformMatrix4fv(mUniformTexMatrix, 1, false, mTexMatrix, 0);
